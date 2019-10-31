@@ -113,7 +113,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
   }
 
   _payment(AppStateModel model) async {
-    await InAppPayments.setSquareApplicationId('sq0idp-Q29izRgOaacjZjUl0Ags-g');
+    await InAppPayments.setSquareApplicationId('sq0idp-lz-UZLXxZvxvtVeGkfUT1A');
     await InAppPayments.startCardEntryFlow(
         onCardNonceRequestSuccess: (CardDetails result) {
           try {
