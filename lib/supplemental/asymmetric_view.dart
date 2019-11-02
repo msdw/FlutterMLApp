@@ -16,52 +16,72 @@ import 'package:flutter/material.dart';
 
 import 'package:shrine_with_square/model/product.dart';
 import 'package:shrine_with_square/supplemental/product_columns.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-class AsymmetricView extends StatelessWidget {
-  const AsymmetricView({Key key, this.products}) : super(key: key);
+class DataRequiredForBuild {
+  File image;
 
-  final List<Product> products;
+  DataRequiredForBuild({
+    this.image,
+  });
+}
 
-  List<Container> _buildColumns(BuildContext context) {
-    if (products == null || products.isEmpty) {
-      return const <Container>[];
-    }
+class AsymmetricView extends StatefulWidget {
 
-    // This will return a list of columns. It will oscillate between the two
-    // kinds of columns. Even cases of the index (0, 2, 4, etc) will be
-    // TwoProductCardColumn and the odd cases will be OneProductCardColumn.
-    //
-    // Each pair of columns will advance us 3 products forward (2 + 1). That's
-    // some kinda awkward math so we use _evenCasesIndex and _oddCasesIndex as
-    // helpers for creating the index of the product list that will correspond
-    // to the index of the list of columns.
-    return List<Container>.generate(_listItemCount(products.length), (int index) {
-      double width = .59 * MediaQuery.of(context).size.width;
-      Widget column;
-      if (index % 2 == 0) {
-        /// Even cases
-        final int bottom = _evenCasesIndex(index);
-        column = TwoProductCardColumn(
-          bottom: products[bottom],
-          top: products.length - 1 >= bottom + 1
-            ? products[bottom + 1]
-            : null,
-        );
-        width += 32.0;
-      } else {
-        /// Odd cases
-        column = OneProductCardColumn(
-          product: products[_oddCasesIndex(index)],
-        );
-      }
-      return Container(
-        width: width,
+  @override
+  _AsymmetricViewState createState() => _AsymmetricViewState();
+}
+
+class _AsymmetricViewState extends State<AsymmetricView> {
+  File _image;
+  Future<DataRequiredForBuild> _dataRequiredForBuild;
+
+  Future<DataRequiredForBuild> _fetchAllData() async {
+    return DataRequiredForBuild(
+      image: await getImage(),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // this should not be done in build method
+    _dataRequiredForBuild = _fetchAllData();
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
+
+  
+
+  Container _buildContainer(BuildContext context) {
+    
+    FloatingActionButton floatingActionButton = FloatingActionButton(
+        onPressed: getImage,
+        tooltip: 'Pick Image',
+        child: FutureBuilder<DataRequiredForBuild>(
+          future: _dataRequiredForBuild,
+          builder: (context, snapshot) {
+            return snapshot.hasData ? Container(child: Image.file(snapshot.data.image))
+             : Container(child: Text(
+                                  'Select an image to analyse',
+                                  style: TextStyle(color: Colors.black)
+    ));
+          })
+    );
+    
+    return Container(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: column,
+          child: floatingActionButton,
         ),
       );
-    }).toList();
   }
 
   int _evenCasesIndex(int input) {
@@ -85,11 +105,8 @@ class AsymmetricView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(0.0, 34.0, 16.0, 44.0),
-      children: _buildColumns(context),
-      physics: const AlwaysScrollableScrollPhysics(),
+    return Container(
+      child: _buildContainer(context),
     );
   }
 }
