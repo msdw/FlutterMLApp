@@ -19,15 +19,10 @@ import 'package:shrine_with_square/supplemental/product_columns.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class DataRequiredForBuild {
-  File image;
-
-  DataRequiredForBuild({
-    this.image,
-  });
-}
-
 class AsymmetricView extends StatefulWidget {
+  const AsymmetricView({Key key, this.products}) : super(key: key);
+
+  final List<Product> products;
 
   @override
   _AsymmetricViewState createState() => _AsymmetricViewState();
@@ -35,20 +30,6 @@ class AsymmetricView extends StatefulWidget {
 
 class _AsymmetricViewState extends State<AsymmetricView> {
   File _image;
-  Future<DataRequiredForBuild> _dataRequiredForBuild;
-
-  Future<DataRequiredForBuild> _fetchAllData() async {
-    return DataRequiredForBuild(
-      image: await getImage(),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // this should not be done in build method
-    _dataRequiredForBuild = _fetchAllData();
-  }
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -58,23 +39,14 @@ class _AsymmetricViewState extends State<AsymmetricView> {
     });
   }
 
-  
-
   Container _buildContainer(BuildContext context) {
     
     FloatingActionButton floatingActionButton = FloatingActionButton(
         onPressed: getImage,
         tooltip: 'Pick Image',
-        child: FutureBuilder<DataRequiredForBuild>(
-          future: _dataRequiredForBuild,
-          builder: (context, snapshot) {
-            return snapshot.hasData ? Container(child: Image.file(snapshot.data.image))
-             : Container(child: Text(
-                                  'Select an image to analyse',
-                                  style: TextStyle(color: Colors.black)
-    ));
-          })
-    );
+        child: _image == null 
+        ? Text('Select an image to analyse', style: TextStyle(color: Colors.black)) 
+        : Image.file(_image) );
     
     return Container(
         child: Padding(
