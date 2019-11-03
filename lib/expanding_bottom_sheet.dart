@@ -295,7 +295,7 @@ class _ExpandingBottomSheetState extends State<ExpandingBottomSheet> with Ticker
               children: <Widget>[
                 AnimatedPadding(
                   padding: _cartPaddingFor(numProducts),
-                  child: const Icon(Icons.shopping_cart),
+                  child: const Icon(Icons.check),
                   duration: const Duration(milliseconds: 225),
                 ),
                 Container(

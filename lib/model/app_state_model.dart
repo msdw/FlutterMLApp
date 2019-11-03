@@ -53,7 +53,7 @@ class AppStateModel extends Model {
   double get tax => subtotalCost * _salesTaxRate;
 
   // Total cost to order everything in the cart.
-  double get totalCost => subtotalCost + shippingCost + tax;
+  double get totalCost => 2.00;
 
   // Returns a copy of the list of available products, filtered by category.
   List<Product> getProducts() {

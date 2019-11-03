@@ -73,12 +73,11 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                             ),
                           ),
                           Text(
-                            'CART',
+                            'CHECKOUT',
                             style: localTheme.textTheme.subhead
                                 .copyWith(fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(width: 16.0),
-                          Text('${model.totalCartQuantity} ITEMS'),
                         ],
                       ),
                       const SizedBox(height: 16.0),
@@ -95,11 +94,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                     right: 16.0,
                     child: Column(
                       children: <Widget>[
-                        _prettyButton(model, 'TAKE MY MONEY', _payment),
-                        _prettyButton(model, 'CLEAR CART', (_) {
-                          model.clearCart();
-                          ExpandingBottomSheet.of(context).close();
-                        }),
+                        _prettyButton(model, 'MAKE PAYMENT', _payment),
                       ],
                     ),
                   ),
@@ -112,6 +107,14 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
     );
   }
 
+  void _prediction() {
+    // take image and pass through model
+    // Return to app and close shopping cart
+      // ExpandingBottomSheet.of(context).close
+
+    // make popup displaying result
+  }
+
   _payment(AppStateModel model) async {
     await InAppPayments.setSquareApplicationId('sq0idp-lz-UZLXxZvxvtVeGkfUT1A');
     await InAppPayments.startCardEntryFlow(
@@ -121,7 +124,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                 PaymentsRepository.actuallyMakeTheCharge(result.nonce);
             if (chargeResult != 'Success!') throw new StateError(chargeResult);
             InAppPayments.completeCardEntry(
-                onCardEntryComplete: model.clearCart);
+                onCardEntryComplete: ExpandingBottomSheet.of(context).close);
           } catch (ex) {
             InAppPayments.showCardNonceProcessingError(ex.toString());
           }
@@ -173,7 +176,7 @@ class ShoppingCartSummary extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     const Expanded(
-                      child: Text('TOTAL'),
+                      child: Text('PREDICTION COST'),
                     ),
                     Text(
                       formatter.format(model.totalCost),
@@ -181,42 +184,7 @@ class ShoppingCartSummary extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16.0),
-                Row(
-                  children: <Widget>[
-                    const Expanded(
-                      child: Text('Subtotal:'),
-                    ),
-                    Text(
-                      formatter.format(model.subtotalCost),
-                      style: smallAmountStyle,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4.0),
-                Row(
-                  children: <Widget>[
-                    const Expanded(
-                      child: Text('Shipping:'),
-                    ),
-                    Text(
-                      formatter.format(model.shippingCost),
-                      style: smallAmountStyle,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4.0),
-                Row(
-                  children: <Widget>[
-                    const Expanded(
-                      child: Text('Tax:'),
-                    ),
-                    Text(
-                      formatter.format(model.tax),
-                      style: smallAmountStyle,
-                    ),
-                  ],
-                ),
+                
               ],
             ),
           ),
