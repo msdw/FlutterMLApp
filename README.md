@@ -14,7 +14,8 @@ flask run --host=0.0.0.0
 ```
 This puts the machine learning model in service to be requested by the Android app. This is not for serving a web app.
 
-In **lib/service.dart**, a URL variable at the top of the file is set by default to the URL necessary for the app running on an Android emmulator to find the Python server, which should be running on your local machine. **You may need to change this depending on where you run the Python server**
+In **lib/service.dart**, a URL variable at the top of the file is set by default to the URL necessary for the app running on an Android emulator to find the Python server, which should be running on your local machine. **You may need to change this depending on where you run the Python server**
 
-Once this is running, go ahead and launch the app, select an image and make a payment (no payments are actually made, this is a test app).
+Once this is running, go ahead and launch the app on an Android emulator (if you need to set up an Android emulator, Flutter's installation documentation ahs a helpful tutorial: https://flutter.dev/docs/get-started/install/windows#install-android-studio)
+Select an image and make a payment (no payments are actually made, this is a test app).
 The default card on Sqaure to use is **4111 1111 1111 1111**
