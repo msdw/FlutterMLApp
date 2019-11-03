@@ -16,6 +16,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'package:shrine_with_square/model/product.dart';
 import 'package:shrine_with_square/model/products_repository.dart';
+import 'dart:io';
 
 double _salesTaxRate = 0.06;
 double _shippingCostPerItem = 7.0;
@@ -23,6 +24,8 @@ double _shippingCostPerItem = 7.0;
 class AppStateModel extends Model {
   // All the available products.
   List<Product> _availableProducts;
+
+  File _predictionImage;
 
   // The currently selected category of products.
   Category _selectedCategory = Category.all;
@@ -34,6 +37,10 @@ class AppStateModel extends Model {
 
   // Total number of items in the cart.
   int get totalCartQuantity => _productsInCart.values.fold(0, (int v, int e) => v + e);
+
+  void set predictionImage(File image) => _predictionImage = image;
+
+  File get predictionImage => _predictionImage;
 
   Category get selectedCategory => _selectedCategory;
 

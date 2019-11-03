@@ -25,8 +25,14 @@ import 'package:shrine_with_square/model/payments_repository.dart';
 import 'package:shrine_with_square/model/product.dart';
 import 'package:square_in_app_payments/in_app_payments.dart';
 import 'package:square_in_app_payments/models.dart';
+import 'package:path/path.dart' show basename;
+import 'service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+
 
 const double _leftColumnWidth = 60.0;
+GlobalKey<ScaffoldState> _key = GlobalKey();
 
 class ShoppingCartPage extends StatefulWidget {
   @override
@@ -107,10 +113,116 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
     );
   }
 
-  void _prediction() {
+
+  Future<List<String>> _uploadPhoto(File image) async {
+    final fileName = basename(image.path);
+    final storageRef = FirebaseStorage.instance.ref().child(fileName);
+
+    //show loading animation
+    /*showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Container(
+                        padding: EdgeInsets.only(left: 10.0),
+                        child: Text('Working...',
+                          textAlign: TextAlign.center,))
+                  ],
+                ),
+              ),
+            ],
+          );
+        }
+    );*/
+
+    final uploadTask = storageRef.putFile(image);
+    final taskSnapshot = await uploadTask.onComplete;
+    final url = await storageRef.getDownloadURL();
+
+
+    /*setState(() {
+      //show snackbar via gloablkey
+      _key.currentState.showSnackBar(SnackBar(content: Text('File uploaded')));
+      _key.currentState.showSnackBar(SnackBar(content: Text('File uploaded')));
+    });*/
+
+    return [fileName, url];
+  }
+
+
+  Future<void> showErrorDialog(String title, String message) async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(message),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  void _classifyPhoto(File file) async {
+      final _restService = RestService();
+
+      try {
+        final data = await _uploadPhoto(file);
+        bool prediction = await _restService.classifyPhoto(data[0], data[1]);
+        String output;
+        if (prediction) {
+          output = 'Palm oil plantation detected!';
+        }
+        else
+          output = 'No palm oil plantation detected';
+
+        /*setState(() {
+          //dismiss loading dialog
+          Navigator.pop(context);
+          _key.currentState.hideCurrentSnackBar();
+          _key.currentState.showSnackBar(SnackBar(content: Text(output)));
+
+        });*/
+      }
+      catch(e){
+
+/*        setState(() {
+          Navigator.pop(context);
+        });*/
+
+        showErrorDialog("Error", "Cannot process this photo :c");
+      }
+  }
+
+  _prediction(AppStateModel model) {
     // take image and pass through model
+    _classifyPhoto(model.predictionImage);
+
     // Return to app and close shopping cart
-      // ExpandingBottomSheet.of(context).close
+    ExpandingBottomSheet.of(context).close();
 
     // make popup displaying result
   }
@@ -124,7 +236,8 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                 PaymentsRepository.actuallyMakeTheCharge(result.nonce);
             if (chargeResult != 'Success!') throw new StateError(chargeResult);
             InAppPayments.completeCardEntry(
-                onCardEntryComplete: ExpandingBottomSheet.of(context).close);
+               // onCardEntryComplete: ExpandingBottomSheet.of(context).close);
+              onCardEntryComplete: _prediction(model));
           } catch (ex) {
             InAppPayments.showCardNonceProcessingError(ex.toString());
           }

@@ -13,6 +13,8 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:shrine_with_square/model/app_state_model.dart';
 
 import 'package:shrine_with_square/model/product.dart';
 import 'package:shrine_with_square/supplemental/product_columns.dart';
@@ -39,14 +41,21 @@ class _AsymmetricViewState extends State<AsymmetricView> {
     });
   }
 
-  Container _buildContainer(BuildContext context) {
+  Widget handleImage(AppStateModel model) {
+    if (_image == null)
+        return (Text('Select an image to analyse', style: TextStyle(color: Colors.black)));
+    else
+      model.predictionImage = _image;
+      return (Image.file(_image));
+  }
+
+  Container _buildContainer(BuildContext context, AppStateModel model) {
     
     FloatingActionButton floatingActionButton = FloatingActionButton(
         onPressed: getImage,
         tooltip: 'Pick Image',
-        child: _image == null 
-        ? Text('Select an image to analyse', style: TextStyle(color: Colors.black)) 
-        : Image.file(_image) );
+        child: handleImage(model)
+    );
     
     return Container(
         child: Padding(
@@ -77,8 +86,14 @@ class _AsymmetricViewState extends State<AsymmetricView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _buildContainer(context),
+
+    return ScopedModelDescendant<AppStateModel>(
+        builder: (BuildContext context, Widget child, AppStateModel model) {
+          return Container(
+            child: _buildContainer(context, model),
+          );
+        },
     );
+
   }
 }
