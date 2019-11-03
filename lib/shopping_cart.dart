@@ -98,11 +98,9 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                     bottom: 16.0,
                     left: 16.0,
                     right: 16.0,
-                    child: Column(
-                      children: <Widget>[
-                        _prettyButton(model, 'MAKE PAYMENT', _payment),
-                      ],
-                    ),
+                    child: model.predictionImage != null
+                        ? _prettyButton(model, 'MAKE PAYMENT', _payment)
+                        : Text('Please select an image to analyse')
                   ),
                 ],
               );
@@ -119,7 +117,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
     final storageRef = FirebaseStorage.instance.ref().child(fileName);
 
     //show loading animation
-    /*showDialog(
+    showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -141,18 +139,14 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
             ],
           );
         }
-    );*/
+    );
 
     final uploadTask = storageRef.putFile(image);
     final taskSnapshot = await uploadTask.onComplete;
     final url = await storageRef.getDownloadURL();
 
 
-    /*setState(() {
-      //show snackbar via gloablkey
-      _key.currentState.showSnackBar(SnackBar(content: Text('File uploaded')));
-      _key.currentState.showSnackBar(SnackBar(content: Text('File uploaded')));
-    });*/
+
 
     return [fileName, url];
   }
@@ -199,19 +193,31 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
         else
           output = 'No palm oil plantation detected';
 
-        /*setState(() {
-          //dismiss loading dialog
-          Navigator.pop(context);
-          _key.currentState.hideCurrentSnackBar();
-          _key.currentState.showSnackBar(SnackBar(content: Text(output)));
 
-        });*/
+        Navigator.pop(context);
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return SimpleDialog(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        padding: EdgeInsets.only(left: 10.0),
+                        child: Text(output,
+                          textAlign: TextAlign.center,)),
+                  ),
+                  new SimpleDialogOption(child: new Text('Ok'),onPressed: (){Navigator.pop(context);},),
+                ],
+              );
+            }
+        );
+
       }
       catch(e){
 
-/*        setState(() {
-          Navigator.pop(context);
-        });*/
+
 
         showErrorDialog("Error", "Cannot process this photo :c");
       }
@@ -222,7 +228,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
     _classifyPhoto(model.predictionImage);
 
     // Return to app and close shopping cart
-    ExpandingBottomSheet.of(context).close();
+    //ExpandingBottomSheet.of(context).close();
 
     // make popup displaying result
   }

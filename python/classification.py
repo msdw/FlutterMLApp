@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 # from tensorflow.keras import layers
 import numpy as np
 import PIL.Image as Image
+from fastai.vision import *
 
 # classifier_url ="https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/2"
 

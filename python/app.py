@@ -24,7 +24,7 @@ def classify_photo():
     print(request.args.get('key', ''))
     print(request.form['name'])
     image_name = request.form['name']
-    image_path = 'images/'+image_name
+    image_path = image_name
     image_url = request.form['url']
 
     #download photo from storage

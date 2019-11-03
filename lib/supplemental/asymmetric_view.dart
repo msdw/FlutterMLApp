@@ -43,7 +43,7 @@ class _AsymmetricViewState extends State<AsymmetricView> {
 
   Widget handleImage(AppStateModel model) {
     if (_image == null)
-        return (Text('Select an image to analyse', style: TextStyle(color: Colors.black)));
+        return (Text('Select an image to analysefor palm oil plantations', style: TextStyle(color: Colors.black)));
     else
       model.predictionImage = _image;
       return (Image.file(_image));
