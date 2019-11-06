@@ -20,3 +20,14 @@ Once this is running, go ahead and launch the app on an Android emulator (if you
 
 Select an image and make a payment (no payments are actually made, this is a test app).
 The default card on Sqaure to use is **4111 1111 1111 1111**
+
+See below some pictures of demo
+![Sign up / Sign in page](https://drive.google.com/open?id=1Jn-KvKlJREiy7IXApKd8dwWYEJDiNH_x)
+![Anthentification](https://drive.google.com/open?id=1zwxPWA_0JY3Z7a-6hhCx1LSuXgOKM_UA)
+![Select an image](https://drive.google.com/open?id=1V1p0cicQYSo2groCutOhRI92_6cYZ4Ay)
+![Image selected](https://drive.google.com/open?id=1hxeA2j1mpVQfrMwRIemMIOT-q8yisPqH)
+![Pay to show](https://drive.google.com/open?id=1z-UAlTAtHVzuC_pJ1JPRQYfJFz4ZIzTz)
+![Paid](https://drive.google.com/open?id=1nVRClsFwZxyiMF8f7GsFOHYP7hbtS3NV)
+![Result](https://drive.google.com/open?id=1MUt6G0ePVyVRNym0_TINYbKBtGQzzSnE)
+![New image without oil palm plantation](https://drive.google.com/open?id=1MBuGU03vVgsg62NxGsUuqZFpSwhNXe2o)
+![Result2](https://drive.google.com/open?id=1pR-Gh41Es9MjUBPXOX-D_AhYnqSff7NC)
