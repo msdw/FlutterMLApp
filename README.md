@@ -21,6 +21,19 @@ Once this is running, go ahead and launch the app on an Android emulator (if you
 Select an image and make a payment (no payments are actually made, this is a test app).
 The default card on Sqaure to use is **4111 1111 1111 1111**
 
+
+# Data comes from https://www.kaggle.com/c/widsdatathon2019/overview
+Why oil palm?
+Deforestation through oil palm plantation growth represents an agricultural trend with large economic and environmental impacts. From shampoo to donuts and ice cream, oil palm is present in many everyday products—but many have never heard of it explicitly! Because oil palm grows only in tropical environments, the crop’s expansion has led to deforestation, increased carbon emissions, and biodiversity loss, while at the same time providing many valuable jobs.
+
+With the economic livelihoods of millions and the ecosystems of the tropics at stake,
+how might we work towards affordable, timely, and scalable ways to
+address the expansion and management of oil palm throughout the world?
+
+High-resolution satellite imagery is a global, regularly-updated, and accurate source of data. Coupled with computer vision algorithms, it presents a promising opportunity for automated mapping of oil palm plantations, an important step toward understanding global impact.
+
+=======================
+
 See below some pictures of demo
 
 
